@@ -1,7 +1,7 @@
 # Site settings
 title: writingstats
 description: writingstats
-path: ""
+path: /writingstats
 url: "" 
 
 # Build settings
