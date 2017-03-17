@@ -1,0 +1,20 @@
+{
+    "name": "writingstats",
+    "version": "0.1.0",
+    "description": "writingstats",
+    "scripts": {        
+        "localbuild": "./localbuild",
+        "test": "cd test; mocha test*js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tkonopka/writingstats"
+    },
+    "keywords": [
+    "writing",
+    "words",
+    "statistics",
+    "visualization"
+    ],
+    "author": "Tomasz Konopka"
+}

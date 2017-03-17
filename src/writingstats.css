@@ -1,0 +1,292 @@
+/* 
+ * writingstats.css
+ * 
+ * Styles for writingstats app 
+ *
+*/
+
+/* Generic components */
+body {
+    font-size: 14px;
+    padding-top: 50px;
+    line-height: 1.5em;
+    font-family: 'Open Sans', Helvetica, sans-serif;
+    background-color: #fbfbfb !important;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 18px;
+}
+
+h3, h4 {
+    font-size: 13px;
+}
+
+/* Make slightly wider than bootstrap usual */
+@media ( min-width : 1240px) {
+    .container {
+        width: 1220px;
+    }
+}
+@media ( min-width : 1300px) {
+    .container {
+        width: 1280px;
+    }
+}
+
+.ws-main a {
+    color: #444 !important;
+}
+.ws-main a:hover {
+    text-decoration: none !important;
+}
+
+
+/* ==========================================================================
+ * Navigation bar
+ * ========================================================================== */
+
+.navbar {
+    height: 50px;
+    min-height: 50px;
+    line-height: 50px;
+    background-color: #fff;
+    color: #111 !important;         
+    border-bottom: solid 1px #ab4a71;
+    border-bottom: solid 2px #f5e8ed;  
+}
+.navbar .navbar-brand {
+    padding: 0px 15px;
+    font-size: inherit;
+    height: 50px;
+    min-height: 50px;
+    line-height: 50px;
+    color: #555;
+}
+.navbar-text {
+    padding: 0px 15px 0px 0px;
+    margin: 0px 15px;
+    line-height: 50px;
+}
+.navbar a {
+    color: #961d4e;
+    color: #444;
+}
+.navbar a:hover {
+    text-decoration: none;
+}
+.navbar-header, .navbar-brand {
+    font-weight: 700;
+    font-size: 150%;
+}
+.navbar-right {
+    font-weight: 700;
+    font-size: 110%;
+}
+.navbar .glyphicon {
+    font-size: 140%;
+}
+
+
+
+/* ==========================================================================
+ * About page
+ * ========================================================================== */
+
+.ws-about {
+    font-size: 110%;
+    line-height: 1.6em;
+    color: #333;
+}
+.ws-about p {
+    padding-top: 0.6em;
+}
+
+.ws-about h1, .ws-about h2, .ws-about h3 {
+    margin-top: 1em;
+    margin-bottom: 0.6em;
+}
+.ws-about h2, .ws-about h3 {
+    margin-top: 2.5em;     
+    color: #000;
+}
+.ws-about-menu {
+    margin-top: 1em;
+    position: fixed;
+}
+.ws-about-menu ul {
+    padding-left: 0px;
+}
+.ws-about-menu li {
+    margin-bottom: 0.5em;
+    list-style: none;   
+}
+
+
+
+
+/* ==========================================================================
+ * Main contents
+ * ========================================================================== */
+
+
+div.ws-main {
+    margin-top: 1em;
+}
+
+
+.input-group {
+    margin-bottom: 0.5em;
+}
+
+#ws-textarea {
+    resize: vertical;
+    width: 100%;
+    height: 100%;
+    min-height: 30em;
+    border: solid 1px #e4e4e4;
+    line-height: 1.2em;
+    padding: 12px;
+    margin-bottom: 0.5em;
+}
+
+.ws-widget svg {
+    width: 100%;
+    padding-bottom: 0em;
+}
+
+.ws-widget {
+    margin: 1.5em 0px 1em 0px;
+    padding-bottom: 0em;
+    height: 100%;
+    overflow: auto;
+}
+
+
+.ws-widget .col-md-4 {
+    min-height: 1.6em;    
+}
+
+
+.ws-A,
+.ws-B {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.ws-AB {
+    clear: both;
+    padding-bottom: 1em;
+}
+.ws-widget .input-group {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.ws-anno {
+    font-size: 110%; 
+    line-height: 1.5em;
+    padding: 1em 1em 1.5em 1em;
+    clear: both;    
+}
+.ws-anno span {
+    padding: 0.2em 0.05em;
+    margin-left: 0.0em;
+    margin-right: 0.0em;
+}
+.ws-anno-content {
+    padding-top: 0.5em;
+}
+.ws-anno ul {
+    padding-left: 0px;
+}
+.ws-anno li {
+    padding-bottom: 1.0em;
+    padding-top: 0.0em;
+    list-style: none;    
+}
+.ws-anno span.ws-highlight { 
+    border-radius: 3px;    
+    padding: 0.0em 0.25em 0.15em 0.25em;
+    margin-left: -0.25em;
+    margin-right: -0.25em;
+    background-color: #eecad4; 
+    /* background-color: #f5e8ed; */
+    color: #111;
+    z-index: -1;
+}
+.ws-analysis {
+    border-top: solid 5px #ab4a71;
+    border-bottom: solid 2px #f5e8ed;
+    padding: 0.0em 12px 0em 12px;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;    
+    background-color: #f8f4f5;
+}
+.ws-analysis .row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.ws-analysis h3 {
+    margin: 0em -12px 0em -12px;        
+    padding-left: 12px;
+    padding: 0.6em 12px 0.6em 12px;    
+    color: #544;
+    background-color: #f5e8ed;
+    cursor: pointer;
+}
+.ws-analysis h3 span {
+    margin-right: 0.3em;
+}
+
+
+svg text.ylab {
+    text-anchor: middle;
+}
+
+svg text.xlab.bottom {
+    text-anchor: middle;
+}
+
+svg text.xlab.top {
+    text-anchor: start;
+}
+
+svg text.title {
+    text-anchor: start;
+}
+
+/* ==========================================================================
+ * Individual Widgets 
+ * ========================================================================== */
+
+#ws-overview .ws-widget {
+    font-size: 140%;
+    text-align: center;
+}
+
+#ws-overview-word-count, #ws-overview-para-count,
+#ws-overview-sentence-count {
+    font-size: 150%;
+    font-weight: 700;
+    margin-right: 0.2em;
+    margin-left: -15px;
+    line-height: 1em;
+    color: #444;
+}
+
+/* ============================================================================
+ * footer
+*/
+
+.footer {
+    position: relative;
+    bottom: 0;
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;    
+    margin-top: 5em;
+}

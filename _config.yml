@@ -1,0 +1,25 @@
+# Site settings
+title: writingstats
+description: writingstats
+path: ""
+url: "" 
+
+# Build settings
+markdown: kramdown
+
+kramdown:
+  input: GFM
+
+exclude:
+  - localbuild
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - package.json
+  - LICENSE
+
+include:
+  - _includes
+  - index.md
+  - about.md
+

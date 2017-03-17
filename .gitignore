@@ -1,0 +1,15 @@
+# ignore temporary files
+*~
+*/*~
+*/*/*~
+
+# ignore devel files
+nbproject
+*/*log
+local*
+*local*
+
+## ignore distribution and jekyll
+_site
+.sass-cache
+.jekyll-metadata

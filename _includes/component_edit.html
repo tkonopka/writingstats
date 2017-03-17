@@ -1,0 +1,21 @@
+
+<div class="input-group">
+    <input type="text" class="form-control" 
+           placeholder="Enter a web URL, or select a local file using 'Browse'"
+           id="ws-load-url" aria-describedby="basic-addon2"> 
+    <span class="input-group-btn"> <input
+            style="display: none; position: fixed; top: -200px" type="file"
+            id="ws-load-file" />
+        <button class="btn btn-default" type="button" id="ws-load-browse"
+                data-tooltip="Browse on local disk">Browse</button>
+        <button class="btn btn-default" type="button" id="ws-load-btn"
+                data-tooltip="Load text (Shortcut: F3)">Load</button>
+    </span>    
+</div>
+
+<textarea id="ws-textarea"></textarea>
+
+<div class="btn-group" role="group">
+    <button class="btn btn-default" type="button" id="ws-save"
+            data-tooltip="Save to local disk">Download text</button>	
+</div>
