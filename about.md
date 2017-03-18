@@ -7,8 +7,6 @@ permalink: /about.html
 
 Writing Stats is a simple app to help you understand your writing. 
 
-It computes a series of statistics from your input. Descriptions below 
-offer some hints for their interpretation.
 
 
 
@@ -29,8 +27,10 @@ organized into boxes on the right-hand side.
 
 <div class="ws-example">
 <span class="ws-example-header">Tip</span>
-<p>Click on chart component to reveal additional information.</p>
+<p>Click on chart components to reveal additional information.</p>
 </div>
+
+
 
 
 <span id="overview"></span>
@@ -49,6 +49,8 @@ add a <span class="ws-highlight">#</span> or
 <span class="ws-highlight">%start%</span> and 
 <span class="ws-highlight">%end%</span> to demarcate the analysis boundaries.</p>
 </div>
+
+
 
 
 <span id="structure"></span>
@@ -78,7 +80,7 @@ The first plot shows frequencies of words anywhere in a sentence. Small words
 like 'the' or 'in' are omitted; remaining words are ordered by decreasing 
 frequency. 
 
-The second plot focuses on just the leading words within sentences. This plot 
+The second plot focuses on the leading words within sentences. This plot 
 includes small words like "The" or "In".
 
 <div class="ws-example">
@@ -90,8 +92,7 @@ includes small words like "The" or "In".
 
 <p class="ws-quote"><span class="ws-highlight">"The</span> second plot focuses on ..."</p>
 
-<p>These examples highlight repeated sentence structure. It is up to you to 
-decide whether this consistency is good or not.</p>
+<p>These examples highlight repeated sentence structure.</p>
 </div>
 
 
@@ -122,6 +123,7 @@ and <span class="ws-highlight">excellence</span> in the same sentence."</p>
 The second plot shows unusual k-mers in *paragraphs*. Technically, the 
 statistic is the
 [chi-square](https://en.wikipedia.org/wiki/Chi-squared_distribution). 
+
 
 
 

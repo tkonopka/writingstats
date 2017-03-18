@@ -123,14 +123,16 @@ describe('Tokenize and filter:', function () {
 
 describe('Tokenize and remove comments:', function () {
 
-    var textC = "I am.\n\n##Comment\n\n% Another comment. \n\nYou are.";
+    var textC = "I am.\n\n##Comment\n\n%Another comment. \n\nYou are.";
     var textE = "I am.\n\n##Comment\n\n%end% comment? \n\nYou are.";
     var textSE = "I am.\n\n#ABC\n\n%start% \n\nYou are.\n\n%end%\n\nHe is.";
     var textNE = "%end% \n\n I am.\n\n You are.";
+    var textK = "I am.\n\n```{r}\nx=5\n```\n\n You are.";
     var tokensC = ws.tokenize(textC);    
     var tokensE = ws.tokenize(textE);
     var tokensSE = ws.tokenize(textSE);    
-    var tokensNE = ws.tokenize(textNE);    
+    var tokensNE = ws.tokenize(textNE); 
+    var tokensK = ws.tokenize(textK); 
 
     describe('fetching first token in document', function () {
         it('should give simple string', function () {
@@ -156,6 +158,14 @@ describe('Tokenize and remove comments:', function () {
         });
     });
     
+    describe('paragraphs with knitr', function () {
+        it('should disappear', function () {
+            var result = ws.filterDocument(tokensK);
+            var expected = [[["I", "am."]], [["You", "are."]]];
+            assert.deepEqual(result, expected);
+        });
+    });
+    
     describe('paragraphs after end marker', function () {
         it('should disappear', function () {
             var result = ws.filterDocument(tokensE);
@@ -163,7 +173,7 @@ describe('Tokenize and remove comments:', function () {
             assert.deepEqual(result, expected);
         });
     });
-
+       
     describe('document with start and end markers', function () {
         it('should give sub document', function () {
             var result = ws.filterDocument(tokensSE);            

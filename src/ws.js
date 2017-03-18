@@ -189,11 +189,17 @@ ws.filterLatex = function (tokens) {
  * 
  * @returns an array similar to input
  */
-ws.filterDocument = function (tokens, commentchars = ["%", "#"],
+ws.filterDocument = function (tokens, commentchars = ["%", "#", "```"],
         startmarker = "%start%", endmarker = "%end%") {
 
     var toklen = tokens.length;
 
+    // create regex for comments
+    commentchars = commentchars.map(function(x) {
+        return "^"+x;
+    });
+    var commentre = new RegExp(commentchars.join("|"));
+                
     // look for start marker in the document
     var startparagraph = 0;
     for (var i = 0; i < toklen; i++) {
@@ -211,7 +217,7 @@ ws.filterDocument = function (tokens, commentchars = ["%", "#"],
         if (first === endmarker) {
             break;
         }
-        if (commentchars.length > 0 && commentchars.indexOf(first[0]) >= 0) {
+        if (commentchars.length > 0 && commentre.test(first)) {
             continue;
         }
         result[result.length] = tokens[i];

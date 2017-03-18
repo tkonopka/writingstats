@@ -342,10 +342,10 @@ ws.runAnalysis = function () {
     var nowtext = gId("ws-textarea").value;
     // run the tokenizing
     ws.tokens = ws.tokenize(nowtext);
+    ws.tokens = ws.filterDocument(ws.tokens);
     if (ws.settings.latex) {
         ws.tokens = ws.filterLatex(ws.tokens);
-    }
-    ws.tokens = ws.filterDocument(ws.tokens);
+    }    
     ws.words = ws.tokens2words(ws.tokens)
             .filter(ws.nonempty)
             .map(function (x) {
@@ -778,7 +778,8 @@ ws.runPatterns = function () {
 
     // get the requested patterns & matching sentences
     var retext = gId("ws-patterns-text").value;
-    if (retext === "") {
+    if (retext === "" || retext.length===1) {
+        // avoid work for empty regex or single character regex
         return;
     }
     var re = new RegExp(retext, "i");
