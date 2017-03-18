@@ -67,6 +67,24 @@ ws.tokenize = function (s) {
 
 
 /**
+ * Get string with first token.  
+ * 
+ * @param tokens array with sentence, paragraph, or document.
+ * @returns string or null
+ */
+ws.getFirstToken = function (tokens) {
+    if (typeof tokens === "string") {
+        return tokens;
+    }
+    // here assume tokens is an array
+    if (tokens.length === 0) {
+        return null;
+    }
+    return ws.getFirstToken(tokens[0]);
+};
+
+
+/**
  * Get a simple array of all starting words in sentences
  * 
  * @param tokens nested array of all tokens (like returned by ws.tokenize)
@@ -101,10 +119,10 @@ ws.tokens2words = function (a) {
     if (typeof a === "undefined") {
         return a;
     }
-    var result = [];    
+    var result = [];
     a.map(function (x) {
         result = result.concat(ws.tokens2words(x));
-    });    
+    });
     return result.filter(ws.nonempty);
 };
 
@@ -156,6 +174,57 @@ ws.filterLatex = function (tokens) {
 };
 
 
+/**
+ * Filter document 
+ *  - remove paragraphs that begin with comment characters
+ *  - cut document to paragraphs between start and end markers
+ * 
+ * @param tokens a nested array as output by tokenize()
+ * @param commentchars array of starting characters that signal comment
+ * 
+ * @param startmarker string that, if present at start of paragraph, signals
+ * to ignore everything before the marker
+ * @param endmarker string that, if present at start of paragraph, signals to 
+ * skip over remaining tokens
+ * 
+ * @returns an array similar to input
+ */
+ws.filterDocument = function (tokens, commentchars = ["%", "#"],
+        startmarker = "%start%", endmarker = "%end%") {
+
+    var toklen = tokens.length;
+
+    // look for start marker in the document
+    var startparagraph = 0;
+    for (var i = 0; i < toklen; i++) {
+        var first = ws.getFirstToken(tokens[i]);
+        if (first === startmarker) {
+            startparagraph = i + 1;
+            break;
+        }
+    }
+
+    // loop over paragraphs, from start to real-end or end-marker
+    var result = [];
+    for (var i = startparagraph; i < toklen; i++) {
+        var first = ws.getFirstToken(tokens[i]);
+        if (first === endmarker) {
+            break;
+        }
+        if (commentchars.length > 0 && commentchars.indexOf(first[0]) >= 0) {
+            continue;
+        }
+        result[result.length] = tokens[i];
+    }
+
+    // but if result is all empty, need to reset to nested array
+    if (ws.countParagraphs(result) === 0) {
+        result = [[[]]];
+    }
+    return result;
+};
+
+
 /*
  * Fetch one sentence from a tokens object.
  * 
@@ -186,10 +255,10 @@ ws.getSentence = function (tokens, index) {
  * @returns simple array with all the tokens.
  */
 ws.getParagraph = function (tokens, index) {
-    var result = [];    
-    tokens[index].map(function(x) {
+    var result = [];
+    tokens[index].map(function (x) {
         result = result.concat(x);
-    });  
+    });
     return result;
 };
 

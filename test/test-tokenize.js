@@ -118,6 +118,72 @@ describe('Tokenize and filter:', function () {
 
 
 /* ==========================================================================
+ * ws.tokenize and ws.filterComments
+ * ========================================================================== */
+
+describe('Tokenize and remove comments:', function () {
+
+    var textC = "I am.\n\n##Comment\n\n% Another comment. \n\nYou are.";
+    var textE = "I am.\n\n##Comment\n\n%end% comment? \n\nYou are.";
+    var textSE = "I am.\n\n#ABC\n\n%start% \n\nYou are.\n\n%end%\n\nHe is.";
+    var textNE = "%end% \n\n I am.\n\n You are.";
+    var tokensC = ws.tokenize(textC);    
+    var tokensE = ws.tokenize(textE);
+    var tokensSE = ws.tokenize(textSE);    
+    var tokensNE = ws.tokenize(textNE);    
+
+    describe('fetching first token in document', function () {
+        it('should give simple string', function () {
+            var result = ws.getFirstToken(tokensC);
+            var expected = "I";
+            assert.deepEqual(result, expected);
+        });
+    });
+    
+    describe('fetching first token in paragraph', function () {
+        it('should give simple string', function () {
+            var result = ws.getFirstToken(tokensC[1]);
+            var expected = "##Comment";
+            assert.deepEqual(result, expected);
+        });
+    });
+
+    describe('paragraphs with comments', function () {
+        it('should disappear', function () {
+            var result = ws.filterDocument(tokensC);
+            var expected = [[["I", "am."]],[["You", "are."]]];
+            assert.deepEqual(result, expected);
+        });
+    });
+    
+    describe('paragraphs after end marker', function () {
+        it('should disappear', function () {
+            var result = ws.filterDocument(tokensE);
+            var expected = [[["I", "am."]]];
+            assert.deepEqual(result, expected);
+        });
+    });
+
+    describe('document with start and end markers', function () {
+        it('should give sub document', function () {
+            var result = ws.filterDocument(tokensSE);            
+            var expected = [[["You", "are."]]];
+            assert.deepEqual(result, expected);
+        });
+    });
+
+    describe('document starting with end marker', function () {
+        it('should give empty document', function () {
+            var result = ws.filterDocument(tokensNE);
+            var expected = [[[]]];
+            assert.deepEqual(result, expected);
+        });
+    });
+
+});
+
+
+/* ==========================================================================
  * ws.tokens2words
  * ========================================================================== */
 

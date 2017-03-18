@@ -7,14 +7,8 @@ permalink: /about.html
 
 Writing Stats is a simple app to help you understand your writing. 
 
- - The app computes a series of statistics from your input. Descriptions below 
+It computes a series of statistics from your input. Descriptions below 
 offer some hints for their interpretation.
-
-- The app displays the statistics in visual form through bar plots. These can 
-help you identify key features in your text.
-
-- Interactions with the bar plots bring out portions of your text. Seeing these
-portions in new contexts can inspire the critical eye. 
 
 
 
@@ -22,41 +16,51 @@ portions in new contexts can inspire the critical eye.
 
 ## Input text
 
-To begin, type or paste some text into the text area on the left hand side. 
+Type or paste some text into the text area on the left-hand side. 
 You can also load text from a file or URL.
 
- -  To load a local file, click the `Browse` button. After you select a file from 
+ To load a local file, click the `Browse` button. After you select a file from 
 disk, the app will display it in the text area.
 
- - To load text from a URL, enter the address into the textbox and click `Load`. 
+To load text from a URL, enter the address into the textbox and click `Load`. 
 
 After you have some text, click `Run` to perform the analysis. Results are 
-organized into boxes on the right hand side.
+organized into boxes on the right-hand side.
 
-
+<div class="ws-example">
+<span class="ws-example-header">Tip</span>
+<p>Click on chart component to reveal additional information.</p>
+</div>
 
 
 <span id="overview"></span>
 
-## Overview stats
+## Text summary
 
-The overview box displays simple counters: number of paragraphs, sentences, and 
+The overview box displays simple counters for the number of paragraphs, sentences, and 
 words in the input text. 
 
-
+<div class="ws-example">
+<span class="ws-example-header">Tip</span>
+<p>If you want to exclude some text from the analysis, 
+add a <span class="ws-highlight">#</span> or 
+<span class="ws-highlight">%</span> character at the start of a paragraph.</p>
+<p>To focus the analysis on a section, use special markers
+<span class="ws-highlight">%start%</span> and 
+<span class="ws-highlight">%end%</span> to demarcate the analysis boundaries.</p>
+</div>
 
 
 <span id="structure"></span>
 
-## Structure stats
+## Text structure
 
 The structure box shows a bar plot with the number of words in each sentence.
-Click on the bars to extract individual sentences.
 
- - Long sentences can be hard to understand. If you see tall spikes in the plot,
-they may indicate areas for revision.
+Long sentences can be hard to understand. Tall spikes in the plot may thus
+indicate areas for revision.
 
- - Bars in the plot are color-coded by paragraph. Long stretches of same-color 
+Bars in the plot are color-coded by paragraph. Long stretches of same-color 
 bars may be signs to split complex paragraphs into smaller parts. 
 
 
@@ -64,49 +68,81 @@ bars may be signs to split complex paragraphs into smaller parts.
 
 <span id="words"></span>
 
-## Word stats
+## Frequent words
 
-The box labeled as 'Words' contains two plots with word frequencies. 
+The frequent words analysis displays the most commonly used words. High-frequency 
+words can bring out the topic/focus of your writing. But they may also indicate 
+poor vocabulary. 
 
 The first plot shows frequencies of words anywhere in a sentence. Small words
 like 'the' or 'in' are omitted; remaining words are ordered by decreasing 
-frequency. You can click on the bars to see the highlighted words in their context.
+frequency. 
 
- - High-frequency words can bring out the topic/focus of your writing. But they
-may also indicate poor vocabulary. 
-
-The second plot shows frequencies of the first words in sentences. This plot 
+The second plot focuses on just the leading words within sentences. This plot 
 includes small words like "The" or "In".
 
- - High-frequency start words may indicate monotonous style.
+<div class="ws-example">
+<span class="ws-example-header">Example</span>
+
+<p class="ws-quote"><span class="ws-highlight">"The</span> frequent words analysis ..."</p>
+
+<p class="ws-quote"><span class="ws-highlight">"The</span> first plot shows frequencies ..."</p>
+
+<p class="ws-quote"><span class="ws-highlight">"The</span> second plot focuses on ..."</p>
+
+<p>These examples highlight repeated sentence structure. It is up to you to 
+decide whether this consistency is good or not.</p>
+</div>
 
 
 
 
 <span id="kmers"></span>
 
-## k-mer stats
+## Enriched k-mers
 
 k-mers are sequences of characters. They may capture entire words or only portions
-thereof. For example, the sequence 'terri' is a 5-mer (it contains five characters)
+thereof. For example, the sequence 'errifi' is a 6-mer (it contains six characters)
 of the word 'terrific'. 
 
-The k-mer analysis box shows bar plots with unusual k-mers. In the first plot, 
-the measure of 'unusual' k-mer is computed per *sentence*. Enrichment is the relative
-k-mer frequency within a *sentence* compared to the whole text. 
+Enriched k-mers are sequences that are over-represented in a sentence or 
+paragraph. Enrichment can be an intentional technique to create emphasis. 
+However, repeated k-mers may also indicate repetitive style.
 
- - Enriched k-mers in sentences can be indicators of typos or repetitive style. 
+In the first plot, unusual k-mers are identified per *sentence*. Numeric scores 
+represent the relative k-mer frequency in a sentence compared to the whole text. 
 
-In the second plot, the measure of 'unusual' k-mers is based on *paragraphs*. 
-Technically, the statistic is the chi-square. 
+<div class="ws-example">
+<span class="ws-example-header">Example</span>
+<p class="ws-quote">"Avoid using <span class="ws-highlight">excellent</span> 
+and <span class="ws-highlight">excellence</span> in the same sentence."</p>
+<p>This sentence contains the k-mer 'excell' in two different words.</p>
+</div>
 
- - Enriched k-mers in paragraphs can bring out the topic focus.
-
-In both plots, you can click on the k-mers to see how they appear in context. 
-
-
+The second plot shows unusual k-mers in *paragraphs*. Technically, the 
+statistic is the
+[chi-square](https://en.wikipedia.org/wiki/Chi-squared_distribution). 
 
 
+
+<span id="patterns"></span>
+
+## Patterns
+
+This box is where you can explore text patterns of interest to you. Just write a 
+word or k-mer to display all the senteces matching that pattern.
+
+<div class="ws-example">
+<span class="ws-example-header">Tip</span>
+<p>The text box also accepts patterns as 
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.
+</p>
+</div>
+
+
+
+
+<br/>
 <span id="thanks"></span>
 
 ## Acknowledgments

@@ -24,7 +24,7 @@ var ws = {
         fontsize: "100%", // size of textarea text
         fontcolor: "#222"	// color of textarea text
     },
-    kmerk: 7, // length of kmers to analyze
+    kmerk: 6, // length of kmers to analyze
     age: -1, // age of analysis
     barmax: 24, // maximum number of rows in barplots
     badwords: ["the", "a", "an", "to", "for", "as",
@@ -345,6 +345,7 @@ ws.runAnalysis = function () {
     if (ws.settings.latex) {
         ws.tokens = ws.filterLatex(ws.tokens);
     }
+    ws.tokens = ws.filterDocument(ws.tokens);
     ws.words = ws.tokens2words(ws.tokens)
             .filter(ws.nonempty)
             .map(function (x) {
@@ -790,6 +791,16 @@ ws.runPatterns = function () {
     abox.select("h4").text("Sentences matching pattern");
     abox.select("div").html(ws.sanitize(html));
 };
+
+
+
+/* ==========================================================================
+ * Handling for the about page
+ * ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+    // modify the ws-example paragraphs
+});
 
 
 /* ==========================================================================
