@@ -1,7 +1,7 @@
 ---
 layout: about
 title: Writing stats - about
-permalink: /about.html
+permalink: /about/
 ---
 
 
@@ -136,9 +136,14 @@ word or k-mer to display all the senteces matching that pattern.
 
 <div class="ws-example">
 <span class="ws-example-header">Tip</span>
-<p>The text box also accepts patterns as 
-<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.
-</p>
+<p>The text box accepts patterns as 
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.</p>
+
+<p>For example, to search for words that start with 'no', enter
+the expression <span class="ws-highlight">^no</span></p> 
+
+<p>As another example, to search for words that 
+end with 'ly', enter <span class="ws-highlight">ly$</span></p>
 </div>
 
 

@@ -114,6 +114,43 @@ ws.sortByValue = function (a, b) {
 };
 
 
+/**
+ * Fetch position of hits among a target
+ * 
+ * @param a array of strings
+ * @param target string, used as RegExp
+ * @returns array holding the indexes of a that contain hits
+ */
+ws.getHitPositions = function (a, target) {
+    var targetre = RegExp(target, "i");
+    return a.map(function (x, i) {
+        return targetre.test(x) ? i : -1;
+    }).filter(function (x) {
+        return x >= 0;
+    });
+};
+
+
+/**
+ * Test if two array contain the same integers
+ * 
+ * @param a array of ints
+ * @param {type} b array of ints
+ * @returns true if contents of a and b are equal
+ */
+ws.arrayEq = function (a, b) {
+    if (a.length !== b.length)
+        return false;
+
+    var ablen = a.length;
+    for (var i = 0; i < ablen; i++) {
+        if (a[i] !== b[i])
+            return false;
+    }
+    return true;
+};
+
+
 /** 
  * use sanitizeHTML to clean an input string or array
  * 
@@ -238,7 +275,7 @@ ws.builders.makeWidgetAB = function (rootname, parts = 1) {
         } else {
             parent.append("div").classed("ws-AB", true);
         }
-    }
+}
 };
 
 
@@ -345,7 +382,7 @@ ws.runAnalysis = function () {
     ws.tokens = ws.filterDocument(ws.tokens);
     if (ws.settings.latex) {
         ws.tokens = ws.filterLatex(ws.tokens);
-    }    
+    }
     ws.words = ws.tokens2words(ws.tokens)
             .filter(ws.nonempty)
             .map(function (x) {
@@ -597,28 +634,55 @@ ws.runFreqWords = function () {
  * Analysis for kmers
  * ========================================================================== */
 
+
+/**
+ * Reduces an array of kmer hits so that two kmers that correspond to the same
+ * hits are not output as separate.
+ * 
+ * Side effect: sorts the hits array.
+ * 
+ * @param hits array of objects containing .kmer .value .hits
+ * @returns a subset of the original array
+ */
+ws.skipRedundantHits = function (hits) {
+    hits.sort(ws.sortByValue);
+    return hits.filter(function (x, i) {
+        if (i === 0)
+            return true;
+        return !ws.arrayEq(x.pos, hits[i - 1].pos);
+    });
+};
+
+
 /**
  * Compute an array of object with an enrichment by count
  * 
  * @param index int (identifier of the enrichment neighborhood, e.g. sentence)
- * @param kmers array of kmers in neighborhood
+ * //@param kmers array of kmers in neighborhood
+ * @param words array of words
  * @param refcount dictionary of kmer counts in reference set
  * 
  * @returns array of hits
  */
-ws.getEnrichmentC = function (index, kmers, refcount) {
-    var hits = [];
-    // get counts in the input kmerss
+ws.getEnrichmentC = function (index, words, refcount) {
+    // get kmer counts in the selection
+    var kmers = ws.getKmers(words, ws.kmerk);
     var kcount = _.countBy(kmers, ws.thex);
+
+    // calculate enrichment for each kmer
+    var hits = [];
     for (var key in kcount) {
         if (!kcount.hasOwnProperty(key))
             continue;
         if (kcount[key] > 1) {
             var enrich = kcount[key] / refcount[key];
-            hits.push({"kmer": key, "value": enrich, "index": index});
+            var kpos = ws.getHitPositions(words, key);
+            hits.push({"kmer": key, "value": enrich, "index": index, "pos": kpos});
         }
     }
-    hits.sort(ws.sortByValue);
+
+    // output only non-redundant top hits
+    hits = ws.skipRedundantHits(hits);
     return hits.slice(0, Math.min(ws.barmax, hits.length));
 };
 
@@ -627,33 +691,33 @@ ws.getEnrichmentC = function (index, kmers, refcount) {
  * Get an array of hits using a chisq approach
  * 
  * @param index int, identifier (e.g. paragraph number)
- * @param kmers array of kmers in selection
- * @param refcount dicionary of kmer counts in reference set
- * @param selwords int, number of words in selection
- * @param totwords int, number of wrods in+out of selection
+ * @param words array of words in the selection
+ * @param refcount dicionary of kmer counts in reference set 
+ * @param totwords int, number of words in reference set (in selection and out)
  * @returns 
  */
-ws.getEnrichmentChiSq = function (index, kmers, refcount, selwords, totwords) {
-    var hits = [];
-    // get counts in the input kmerss
+ws.getEnrichmentChiSq = function (index, words, refcount, totwords) {
+    // get kmer counts in the selection
+    var kmers = ws.getKmers(words, ws.kmerk);
+    var selwords = words.length;
     var kcount = _.countBy(kmers, ws.thex);
+
+    // evaluate enrichment for each kmer
+    var hits = [];
     for (var key in kcount) {
-        // skip if this key is trivial
         if (!kcount.hasOwnProperty(key))
             continue;
         var kk = kcount[key];
         if (kk <= 1)
             continue;
-        // compute expected quantities            
+        // compute contingency table 
         // rows are for hits/nonhits, cols are for in/out selection
         var rowcounts = [refcount[key], totwords - refcount[key]];
-        var colcounts = [selwords, totwords - selwords];
-        // compute expected contingency table
+        var colcounts = [selwords, totwords - selwords];        
         var expected = [rowcounts[0] * colcounts[0] / totwords,
             rowcounts[0] * colcounts[1] / totwords,
             rowcounts[1] * colcounts[0] / totwords,
-            rowcounts[1] * colcounts[1] / totwords];
-        // compute observed matrix                        
+            rowcounts[1] * colcounts[1] / totwords];          
         var observed = [kk, refcount[key] - kk, selwords - kk,
             totwords - selwords - refcount[key] + kk];
         var chisq = 0;
@@ -661,9 +725,12 @@ ws.getEnrichmentChiSq = function (index, kmers, refcount, selwords, totwords) {
             var temp = (expected[q] - observed[q] - 0.5);
             chisq += temp * temp / expected[q];
         }
-        hits.push({"kmer": key, "value": chisq, "index": index});
+        var kpos = ws.getHitPositions(words, key);
+        hits.push({"kmer": key, "value": chisq, "index": index, "pos": kpos});
     }
-    hits.sort(ws.sortByValue);
+
+    // output only non-redundant top hits
+    hits = ws.skipRedundantHits(hits);
     return hits.slice(0, Math.min(ws.barmax, hits.length));
 };
 
@@ -687,21 +754,17 @@ ws.runKmers = function () {
     var si = 0; // counter, sentence index
     var hitsR = [], hitsC = []; // array with hits
     for (var i = 0; i < toks.length; i++) {
-        //console.log("Paragraph " + i);
-        var parkmers = [];
-        var numwords = 0;
+        var nowpar = [];
         // compute enrichment in sentences                
         for (var j = 0; j < toks[i].length; j++) {
             si++;
             var nowsentence = toks[i][j];
-            numwords += nowsentence.length;
-            var nowkmers = ws.getKmers(nowsentence, ws.kmerk);
-            hitsC = hitsC.concat(ws.getEnrichmentC(si, nowkmers, refcount));
-            parkmers = parkmers.concat(nowkmers);
+            hitsC = hitsC.concat(ws.getEnrichmentC(si, nowsentence, refcount));
+            nowpar = nowpar.concat(nowsentence);
         }
         // compute enrichment in paragraphs        
-        hitsR = hitsR.concat(ws.getEnrichmentChiSq(i + 1, parkmers, refcount,
-                numwords, totwords));
+        hitsR = hitsR.concat(ws.getEnrichmentChiSq(i + 1, nowpar, refcount,
+                totwords));
     }
 
     hitsC = hitsC.sort(ws.sortByValue).slice(0, Math.min(ws.barmax, hitsC.length));
@@ -778,7 +841,7 @@ ws.runPatterns = function () {
 
     // get the requested patterns & matching sentences
     var retext = gId("ws-patterns-text").value;
-    if (retext === "" || retext.length===1) {
+    if (retext === "" || retext.length === 1) {
         // avoid work for empty regex or single character regex
         return;
     }
