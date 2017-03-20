@@ -1,7 +1,7 @@
 # Writing Stats
 
-Writing Stats is a [simple app](https://tkonopka.github.io/writingstats/) to 
-help with writing. 
+Writing Stats is a web app to aid writing. 
+The homepage is [here](https://tkonopka.github.io/writingstats/about/).
 
 
 
@@ -33,10 +33,11 @@ See the README in the test folder for additional details.
 
 ## Acknowledgments
 
- - [d3](https://github.com/d3/d3) document manipulation and graphics
- - [underscore.js](http://underscorejs.org/) general purpose js tools
- - [sanitize-html](https://github.com/punkave/sanitize-html) cleaning of user input
- - [filesaver](https://github.com/eligrey/FileSaver.js) saving files 
- - [bootstrap](http://getbootstrap.com/) responsive HTML
- - [Google fonts](https://fonts.google.com/)
+ - [d3](https://github.com/d3/d3) - document manipulation and graphics
+ - [underscore.js](http://underscorejs.org/) - general purpose js tools
+ - [sanitize-html](https://github.com/punkave/sanitize-html) - cleaning of user input
+ - [filesaver](https://github.com/eligrey/FileSaver.js) - saving files 
+ - [bootstrap](http://getbootstrap.com/) - responsive HTML
+ - [Google fonts](https://fonts.google.com/) - fonts
+ - [Jekyll](https://github.com/jekyll/jekyll) - web page generation 
 

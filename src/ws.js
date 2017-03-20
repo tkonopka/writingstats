@@ -5,7 +5,6 @@
  * Tests for this library are located in the test/ folder. 
  */
 
-/* global _ */
 /* global ws */
 
 

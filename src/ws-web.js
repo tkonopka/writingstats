@@ -173,23 +173,31 @@ ws.sanitize = function (x) {
  * helper to wrap words in one sentece into spans
  * 
  * @param a simple array of words
- * @param re regexp for highlighting
+ * @param target string or regexp to find for highlighting
+ * (used as naive regexp, but if target is too short, regexp is augmented by ^$)
  * @param starting determines if to highlight only the first word
  * @returns html string (not sanitized)
  */
-ws.wrapInSpans = function (a, re, starting = false) {
+ws.wrapInSpans = function (a, target, starting = false) {
+    // convert target into a regexp
+    if (typeof target === "string") {
+        if (target.length < ws.kmerk) {
+            target = "^" + target + "$";
+        }        
+        target = new RegExp(target, "i");
+    }
     var ee = "</span>";
     if (starting) {
         var a2 = a.map(function (x) {
             return "<span>" + x + ee;
         });
-        if (a[0].match(re)) {
+        if (a[0].match(target)) {
             a2[0] = "<span class='ws-highlight'>" + a[0] + ee;
         }
         return a2;
     }
     return a.map(function (x) {
-        if (x.match(re)) {
+        if (x.match(target)) {
             return "<span class='ws-highlight'>" + x + ee;
         } else {
             return "<span>" + x + ee;
@@ -202,13 +210,13 @@ ws.wrapInSpans = function (a, re, starting = false) {
  * Related to ws.wrapInSpans, this prepares multiple sentences
  * 
  * @param sentences array of sentences
- * @param re regex for highlighting
+ * @param target string target for highlighting
  * @param starting logical, check if highlighting only the first words
  * @returns string with html (not sanitized)
  */
-ws.wrapManyInSpans = function (sentences, re, starting = false) {
+ws.wrapManyInSpans = function (sentences, target, starting = false) {
     sentences = sentences.map(function (a) {
-        var a2 = ws.wrapInSpans(a, re, starting);
+        var a2 = ws.wrapInSpans(a, target, starting);
         var a2 = "<li>" + a2.join(" ") + "</li>";
         return a2;
     });
@@ -233,7 +241,7 @@ ws.builders.makeWidgets = function () {
         adiv.append("div").classed("ws-widget", true);
     });
     // create behaviors (rolling/unrolling)
-    d3.selectAll("h3").on('click', function (d) {
+    d3.selectAll("h3").on('click', function () {
         // toggle the glyphicon and widget visibility
         d3.select(this).select("span.glyphicon")
                 .toggleClasses("glyphicon-triangle-right", "glyphicon-triangle-bottom");
@@ -283,21 +291,22 @@ ws.builders.makeWidgetAB = function (rootname, parts = 1) {
  *  This is a builder for one particular analysis component - overview
  */
 ws.builders.makeOverview = function () {
-    var parent = d3.select("#ws-overview .ws-widget");
+    var wso = "ws-overview";
+    var parent = d3.select("#" + wso + " .ws-widget");
     if (parent.selectAll("div").size() < 2) {
         var row = parent.append("div").attr("class", "row");
         var newdiv = function () {
             return row.append("div").attr("class", "col-md-4");
         };
         var mydiv = newdiv();
-        mydiv.append("span").attr("id", "ws-overview-para-count");
-        mydiv.append("span").attr("id", "ws-overview-para-comment").text("paragraphs");
+        mydiv.append("span").attr("id", wso + "-para-count");
+        mydiv.append("span").attr("id", wso + "-para-comment").text("paragraphs");
         var mydiv = newdiv();
-        mydiv.append("span").attr("id", "ws-overview-sentence-count");
-        mydiv.append("span").attr("id", "ws-overview-sentence-comment").text("sentences");
+        mydiv.append("span").attr("id", wso + "-sentence-count");
+        mydiv.append("span").attr("id", wso + "-sentence-comment").text("sentences");
         var mydiv = newdiv();
-        mydiv.append("span").attr("id", "ws-overview-word-count");
-        mydiv.append("span").attr("id", "ws-overview-word-comment").text("words");
+        mydiv.append("span").attr("id", wso + "-word-count");
+        mydiv.append("span").attr("id", wso + "-word-comment").text("words");
         parent.append("div").classed("ws-AB", true);
     }
 };
@@ -394,8 +403,7 @@ ws.runAnalysis = function () {
     ws.runFreqWords();
     ws.runKmers();
     ws.runPatterns();
-    d3.select(".ws-analysis .ws-widget").style("display", "inherit");
-    d3.select(".ws-analysis .ws-anno").style("display", "none");
+    d3.selectAll(".ws-analysis .ws-anno").style("display", "none");
     ws.age = 0;
     d3.select("#ws-run").text("Analysis ready!");
 };
@@ -493,9 +501,15 @@ ws.runOverview = function () {
     var numparagraphs = ws.countParagraphs(ws.tokens),
             numsentences = ws.countSentences(ws.tokens),
             numwords = ws.countWords(ws.tokens);
-    d3.select("#ws-overview-para-count").text(numparagraphs);
-    d3.select("#ws-overview-sentence-count").text(numsentences);
-    d3.select("#ws-overview-word-count").text(numwords);
+    var wso = "#ws-overview";
+    d3.select(wso + "-para-count").text(numparagraphs);
+    d3.select(wso + "-sentence-count").text(numsentences);
+    d3.select(wso + "-word-count").text(numwords);
+    // make this widget visible by default
+    d3.select(wso + " span.glyphicon")
+            .classed("glyphicon-triangle-right", false)
+            .classed("glyphicon-triangle-bottom", true);
+    d3.select(wso + " .ws-widget").style("display", "block");
 };
 
 
@@ -596,11 +610,10 @@ ws.runFreqWords = function () {
         // highlight the clicked bar
         d3.selectAll("#ws-freqwords svg rect").attr("stroke", null);
         d3.select(bar).attr("stroke", brst.stroke);
-        var word = d.name;
-        var wordre = new RegExp(word, "i");
+        var word = d.name;        
         // fetch sentence and convert into html
         var sentences = ws.getSentencesContaining(toks, word, starting);
-        var html = ws.wrapManyInSpans(sentences, wordre, starting);
+        var html = ws.wrapManyInSpans(sentences, word, starting);
         var abox = d3.select("#ws-freqwords .ws-anno");
         abox.style("display", "block");
         abox.select("h4").text("Highlighted words");
@@ -634,7 +647,6 @@ ws.runFreqWords = function () {
  * Analysis for kmers
  * ========================================================================== */
 
-
 /**
  * Reduces an array of kmer hits so that two kmers that correspond to the same
  * hits are not output as separate.
@@ -657,8 +669,7 @@ ws.skipRedundantHits = function (hits) {
 /**
  * Compute an array of object with an enrichment by count
  * 
- * @param index int (identifier of the enrichment neighborhood, e.g. sentence)
- * //@param kmers array of kmers in neighborhood
+ * @param index int (identifier of the enrichment neighborhood, e.g. sentence) 
  * @param words array of words
  * @param refcount dictionary of kmer counts in reference set
  * 
@@ -713,11 +724,11 @@ ws.getEnrichmentChiSq = function (index, words, refcount, totwords) {
         // compute contingency table 
         // rows are for hits/nonhits, cols are for in/out selection
         var rowcounts = [refcount[key], totwords - refcount[key]];
-        var colcounts = [selwords, totwords - selwords];        
+        var colcounts = [selwords, totwords - selwords];
         var expected = [rowcounts[0] * colcounts[0] / totwords,
             rowcounts[0] * colcounts[1] / totwords,
             rowcounts[1] * colcounts[0] / totwords,
-            rowcounts[1] * colcounts[1] / totwords];          
+            rowcounts[1] * colcounts[1] / totwords];
         var observed = [kk, refcount[key] - kk, selwords - kk,
             totwords - selwords - refcount[key] + kk];
         var chisq = 0;
@@ -789,7 +800,7 @@ ws.runKmers = function () {
         d3.select(bar).attr("stroke", brst.stroke);
         // fetch sentence and convert into html
         var sentence = ws.getSentence(toks, +d.index - 1);
-        sentence = ws.wrapInSpans(sentence, new RegExp(d.kmer, "i"));
+        sentence = ws.wrapInSpans(sentence, d.kmer);
         var abox = d3.select("#ws-kmers .ws-anno");
         abox.style("display", "block");
         abox.select("h4").text("Highlighted k-mer in sentence " + d.index);
@@ -801,7 +812,7 @@ ws.runKmers = function () {
         d3.select(bar).attr("stroke", brst.stroke);
         // fetch sentence and convert into html
         var paragraph = ws.getParagraph(toks, +d.index - 1);
-        paragraph = ws.wrapInSpans(paragraph, new RegExp(d.kmer, "i"));
+        paragraph = ws.wrapInSpans(paragraph, d.kmer);
         var abox = d3.select("#ws-kmers .ws-anno");
         abox.style("display", "block");
         abox.select("h4").text("Highlighted k-mer in paragraph " + d.index);
