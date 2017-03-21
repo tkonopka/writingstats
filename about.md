@@ -115,9 +115,9 @@ represent the relative k-mer frequency in a sentence compared to the whole text.
 
 <div class="ws-example">
 <span class="ws-example-header">Example</span>
-<p class="ws-quote">"Avoid using <span class="ws-highlight">excellent</span> 
-and <span class="ws-highlight">excellence</span> in the same sentence."</p>
-<p>This sentence contains the k-mer 'excell' in two different words.</p>
+<p class="ws-quote">"If the <span class="ws-highlight">difference</span> between 
+two numbers is not zero, then they are <span class="ws-highlight">different</span>."</p>
+<p>This sentence contains the k-mer 'differ' in two words.</p>
 </div>
 
 The second plot shows unusual k-mers in *paragraphs*. Technically, the 
@@ -157,8 +157,8 @@ end with 'ly', enter <span class="ws-highlight">ly$</span></p>
 The Writing Stats app provides some unique writing aids, but it draws 
 inspiration from existing tools. 
 
- - [Hemingway app](http://www.hemingwayapp.com/) scores 
+[Hemingway app](http://www.hemingwayapp.com/) scores 
 text for readability. It also helps identify problem words and phrases.
 
- - [Grammarly](https://www.grammarly.com/) performs spelling and grammar checks.
+[Grammarly](https://www.grammarly.com/) performs spelling and grammar checks.
  
