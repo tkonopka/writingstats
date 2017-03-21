@@ -17,7 +17,7 @@ Writing Stats is a simple app to help you understand your writing.
 Type or paste some text into the text area on the left-hand side. 
 You can also load text from a file or URL.
 
- To load a local file, click the `Browse` button. After you select a file from 
+To load a local file, click the `Browse` button. After you select a file from 
 disk, the app will display it in the text area.
 
 To load text from a URL, enter the address into the textbox and click `Load`. 
@@ -37,17 +37,18 @@ organized into boxes on the right-hand side.
 
 ## Text summary
 
-The overview box displays simple counters for the number of paragraphs, sentences, and 
-words in the input text. 
+The first analysis box displays simple counters for the number of paragraphs, 
+sentences, and words in the input text. 
 
 <div class="ws-example">
 <span class="ws-example-header">Tip</span>
 <p>If you want to exclude some text from the analysis, 
 add a <span class="ws-highlight">#</span> or 
 <span class="ws-highlight">%</span> character at the start of a paragraph.</p>
-<p>To focus the analysis on a section, use special markers
+<p>To focus on a section, use markers
 <span class="ws-highlight">%start%</span> and 
-<span class="ws-highlight">%end%</span> to demarcate the analysis boundaries.</p>
+<span class="ws-highlight">%end%</span> at the start of a paragraph to demarcate 
+analysis boundaries.</p>
 </div>
 
 
@@ -117,7 +118,7 @@ represent the relative k-mer frequency in a sentence compared to the whole text.
 <span class="ws-example-header">Example</span>
 <p class="ws-quote">"If the <span class="ws-highlight">difference</span> between 
 two numbers is not zero, then they are <span class="ws-highlight">different</span>."</p>
-<p>This sentence contains the k-mer 'differ' in two words.</p>
+<p>All the words in this sentence are distinct, but the k-mer 'differ' is repeated twice.</p>
 </div>
 
 The second plot shows unusual k-mers in *paragraphs*. Technically, the 
@@ -131,12 +132,12 @@ statistic is the
 
 ## Patterns
 
-This box is where you can explore text patterns of interest to you. Just write a 
-word or k-mer to display all the senteces matching that pattern.
+Here you can explore text patterns of interest to you. Just write a 
+word or k-mer to display all the sentences matching that pattern.
 
 <div class="ws-example">
 <span class="ws-example-header">Tip</span>
-<p>The text box accepts patterns as 
+<p>You can search for patterns using
 <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.</p>
 
 <p>For example, to search for words that start with 'no', enter
@@ -154,8 +155,8 @@ end with 'ly', enter <span class="ws-highlight">ly$</span></p>
 
 ## Acknowledgments
 
-The Writing Stats app provides some unique writing aids, but it draws 
-inspiration from existing tools. 
+Writing Stats provides some unique writing aids, but it draws inspiration 
+from existing tools. 
 
 [Hemingway app](http://www.hemingwayapp.com/) scores 
 text for readability. It also helps identify problem words and phrases.
