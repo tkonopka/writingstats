@@ -183,7 +183,7 @@ ws.wrapInSpans = function (a, target, starting = false) {
     if (typeof target === "string") {
         if (target.length < ws.kmerk) {
             target = "^" + target + "$";
-        }        
+        }
         target = new RegExp(target, "i");
     }
     var ee = "</span>";
@@ -370,6 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ws.age++;
             d3.select("#ws-run").text("Re-run analysis (F4)");
         }
+        ws.updateCharCount(gId("ws-textarea").value);
     });
     // handle file buttons and analysis run
     d3.select("#ws-load-btn").on('click', ws.loadText);
@@ -378,6 +379,18 @@ document.addEventListener("DOMContentLoaded", function () {
     d3.select("#ws-save").on('click', ws.saveText);
     d3.select("#ws-run").on('click', ws.runAnalysis);
 });
+
+
+/**
+ *  Simple helper to count characters in the input string 
+ *
+ *  @param x text to count characters in
+ *  @returns nothing, but updates a DOM element  
+ */
+ws.updateCharCount = function (x) {
+    var textlen = x.length;
+    gId("ws-character-count").innerHTML = textlen + " characters";
+};
 
 
 /**
@@ -397,7 +410,8 @@ ws.runAnalysis = function () {
             .map(function (x) {
                 return x.toLowerCase();
             });
-    // run the inidvidual analyses    
+    // run the inidvidual analyses 
+    ws.updateCharCount(nowtext);
     ws.runOverview();
     ws.runStructure();
     ws.runFreqWords();
@@ -610,7 +624,7 @@ ws.runFreqWords = function () {
         // highlight the clicked bar
         d3.selectAll("#ws-freqwords svg rect").attr("stroke", null);
         d3.select(bar).attr("stroke", brst.stroke);
-        var word = d.name;        
+        var word = d.name;
         // fetch sentence and convert into html
         var sentences = ws.getSentencesContaining(toks, word, starting);
         var html = ws.wrapManyInSpans(sentences, word, starting);
